@@ -3,359 +3,471 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wither Flower Practice Tool</title>
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts: Fredoka & Quicksand for playful/spray paint vibe -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Quicksand:wght@600;700&display=swap" rel="stylesheet">
-  
+  <title>Flower Wither Practice Tool</title>
   <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #fbe8ee 0%, #e6d3ed 50%, #d8c3e8 100%);
+      --card-bg: rgba(255, 255, 255, 0.92);
+      --purple-primary: #7d3c98;
+      --purple-hover: #6c3483;
+      --text-dark: #332233;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
-      font-family: 'Quicksand', sans-serif;
-      user-select: none;
-    }
-    
-    .flower-font {
-      font-family: 'Fredoka', cursive;
-      filter: drop-shadow(0px 1px 1px rgba(0,0,0,0.2));
-    }
-
-    /* Soft pastel store awning background pattern */
-    .bg-flower-shop {
-      background-color: #fce4ec;
-      background-image: 
-        linear-gradient(90deg, rgba(233, 213, 255, 0.4) 50%, transparent 50%),
-        radial-gradient(circle at 50% 0, #fbcfe8 0%, #f472b6 100%);
-      background-size: 80px 100%, 100% 100%;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg-gradient);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      color: var(--text-dark);
     }
 
-    /* Badge glow effect matching the stickers in reference */
-    .bouquet-sticker {
-      filter: drop-shadow(0px 8px 16px rgba(120, 53, 15, 0.15)) drop-shadow(0px 0px 4px rgba(255, 255, 255, 0.9));
-      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    .bouquet-sticker:hover {
-      transform: translateY(-4px) scale(1.02);
+    .game-container {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border-radius: 24px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.12), 0 5px 15px rgba(125, 60, 152, 0.08);
+      padding: 25px 35px;
+      max-width: 900px;
+      width: 100%;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.6);
     }
 
-    /* Keyframe animation for new round loading */
-    @keyframes popIn {
-      0% { opacity: 0; transform: scale(0.9) translateY(10px); }
-      100% { opacity: 1; transform: scale(1) translateY(0); }
+    h1 {
+      font-size: 26px;
+      color: var(--purple-primary);
+      margin-bottom: 4px;
     }
-    .animate-pop {
-      animation: popIn 0.35s ease-out forwards;
+
+    .subtitle {
+      font-size: 13px;
+      color: #665566;
+      margin-bottom: 20px;
+    }
+
+    /* Bouquets Banner Window */
+    .bouquet-stage {
+      background: linear-gradient(180deg, #fce4ec 0%, #f3e5f5 100%);
+      border: 6px solid #ffffff;
+      outline: 2px solid #e1bee7;
+      border-radius: 18px;
+      padding: 25px 15px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      gap: 15px;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.05);
+      margin-bottom: 20px;
+    }
+
+    .bouquet-card {
+      position: relative;
+      width: 30%;
+      max-width: 250px;
+      aspect-ratio: 1.15;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+      transition: transform 0.2s ease;
+    }
+
+    .bouquet-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .bouquet-svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Form & Input */
+    .input-form {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    input[type="text"] {
+      padding: 12px 20px;
+      font-size: 18px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      border: 2px solid #d8b4e2;
+      border-radius: 12px;
+      outline: none;
+      width: 240px;
+      text-transform: uppercase;
+      text-align: center;
+      background: #ffffff;
+      color: var(--purple-primary);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--purple-primary);
+      box-shadow: 0 0 0 4px rgba(125, 60, 152, 0.15);
+    }
+
+    button.btn-primary {
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: 700;
+      background-color: var(--purple-primary);
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(125, 60, 152, 0.25);
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    button.btn-primary:hover {
+      background-color: var(--purple-hover);
+    }
+
+    button.btn-primary:active {
+      transform: scale(0.98);
+    }
+
+    /* Feedback Line */
+    .feedback {
+      min-height: 32px;
+      font-size: 17px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .feedback.correct {
+      color: #27ae60;
+    }
+
+    .feedback.wrong {
+      color: #e74c3c;
+    }
+
+    .time-badge {
+      background: #e8f8f5;
+      color: #117a65;
+      border: 1px solid #a3e4d7;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 14px;
+    }
+
+    /* Stats Bar */
+    .stats-bar {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      background: #f8f0fc;
+      padding: 12px 20px;
+      border-radius: 14px;
+      border: 1px solid #ebdaf2;
+      margin-bottom: 15px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #553355;
+    }
+
+    .stat-item span {
+      color: var(--purple-primary);
+      font-weight: 800;
+    }
+
+    /* Controls */
+    .control-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+      border: 1px solid #d8b4e2;
+      color: var(--purple-primary);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-secondary:hover {
+      background: #f8f0fc;
+      border-color: var(--purple-primary);
+    }
+
+    /* Color Bank */
+    .color-bank {
+      background: #ffffff;
+      border: 1px solid #e1bee7;
+      border-radius: 14px;
+      padding: 12px;
+      transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
+      overflow: hidden;
+    }
+
+    .color-bank.hidden {
+      max-height: 0;
+      opacity: 0;
+      padding: 0 12px;
+      border: none;
+    }
+
+    .color-bank-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #887788;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .flower-pills {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .flower-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 12px;
+      background: #fcf8ff;
+      border: 1px solid #f0e0f5;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .color-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      box-shadow: 0 0 2px rgba(0,0,0,0.2);
     }
   </style>
 </head>
-<body class="bg-flower-shop min-h-screen flex flex-col items-center justify-between p-4 sm:p-6 text-slate-800">
+<body>
 
-  <!-- Main Container -->
-  <div class="w-full max-w-5xl mx-auto flex flex-col items-center justify-center flex-1">
-    
-    <!-- Header & Scoreboard -->
-    <header class="w-full max-w-xl bg-white/80 backdrop-blur-md rounded-2xl p-4 mb-6 shadow-lg border border-pink-200/60 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
-      <div>
-        <h1 class="text-2xl sm:text-3xl font-bold text-pink-900 tracking-tight flex items-center gap-2 justify-center sm:justify-start">
-          <span>🌸</span> Wither Practice
-        </h1>
-        <p class="text-xs sm:text-sm text-pink-700 font-medium">Find the flower missing from both names and colors!</p>
-      </div>
+  <div class="game-container">
+    <h1>Wither Practice</h1>
+    <p class="subtitle">Identify the missing flower (neither in text nor in color)! First to 5 wins.</p>
 
-      <!-- Score display -->
-    <div class="flex items-center gap-3 bg-pink-100/80 border border-pink-300/80 px-4 py-2 rounded-xl">
-      <div class="text-center">
-        <span class="block text-xs uppercase tracking-wider font-bold text-pink-600">Points</span>
-        <span id="scoreDisplay" class="text-2xl font-black text-pink-900 leading-none">0</span>
-      </div>
-      <div class="text-pink-300 font-light text-xl">/</div>
-      <div class="text-xs text-pink-600 font-semibold leading-tight">First to<br><span class="text-sm font-bold text-pink-800">5 Wins</span></div>
-    </div>
-  </header>
-
-  <!-- Round Container (The 3 Bouquets horizontally) -->
-  <div class="w-full bg-white/40 backdrop-blur-lg rounded-3xl p-6 sm:p-10 shadow-xl border-2 border-white/80 mb-6">
-    
-    <div id="bouquetsContainer" class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 justify-items-center items-center">
-      <!-- 3 SVG Bouquets will be generated dynamically here -->
+    <!-- 3 Horizontal Bouquets -->
+    <div class="bouquet-stage" id="bouquetStage">
+      <!-- Generated via JavaScript -->
     </div>
 
-  </div>
-
-  <!-- User Input & Interaction Area -->
-  <div class="w-full max-w-md bg-white/90 backdrop-blur-md rounded-2xl p-5 shadow-xl border border-pink-200/80 flex flex-col items-center gap-3">
-    
-    <form id="guessForm" onsubmit="submitGuess(event)" class="w-full flex gap-2">
-      <input 
-        type="text" 
-        id="guessInput" 
-        placeholder="Type missing flower..." 
-        autocomplete="off" 
-        autofocus 
-        class="w-full px-4 py-3 text-lg font-bold uppercase tracking-wider text-center bg-pink-50/50 border-2 border-pink-300 rounded-xl focus:outline-none focus:border-pink-500 focus:bg-white focus:ring-2 focus:ring-pink-200 transition-all placeholder:font-normal placeholder:normal-case placeholder:text-pink-300"
-      />
-      <button 
-        type="submit" 
-        class="px-6 py-3 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 active:scale-95 text-white font-bold text-lg rounded-xl shadow-md shadow-pink-500/30 transition-all cursor-pointer whitespace-nowrap"
-      >
-        Submit
-      </button>
+    <!-- Input Form -->
+    <form class="input-form" id="guessForm" onsubmit="handleGuess(event)">
+      <input type="text" id="guessInput" placeholder="TYPE FLOWER..." autocomplete="off" autofocus />
+      <button type="submit" class="btn-primary">Submit</button>
     </form>
 
-    <!-- Feedback / Result message -->
-    <div id="feedbackMessage" class="h-6 text-sm font-bold transition-all text-center"></div>
+    <!-- Feedback Area -->
+    <div class="feedback" id="feedback"></div>
 
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+      <div class="stat-item">Score: <span id="score">0</span> / 5</div>
+      <div class="stat-item">Last Time: <span id="lastTime">--</span></div>
+      <div class="stat-item">Best Time: <span id="bestTime">--</span></div>
+    </div>
+
+    <!-- Extra Controls -->
+    <div class="control-row">
+      <button class="btn-secondary" id="toggleBankBtn" onclick="toggleColorBank()">Hide Color Bank</button>
+    </div>
+
+    <!-- Color Bank Reference -->
+    <div class="color-bank" id="colorBank">
+      <div class="color-bank-title">Flower Color Reference</div>
+      <div class="flower-pills" id="flowerPills"></div>
+    </div>
   </div>
 
-  <!-- Tools & Options Bar -->
-  <div class="flex flex-wrap items-center justify-center gap-3 mt-4">
-    <button 
-      onclick="toggleColorBank()" 
-      id="colorBankBtn" 
-      class="px-4 py-2 bg-white/80 hover:bg-white text-pink-900 border border-pink-200 text-xs font-bold rounded-xl shadow-sm transition-all flex items-center gap-1.5 cursor-pointer"
-    >
-      <span id="colorBankIcon">👁️</span> <span id="colorBankText">Hide Color Bank</span>
-    </button>
-  </div>
-
-</div>
-
-<!-- Flower Reference Legend (Bottom Bar) -->
-<footer id="colorBankFooter" class="w-full max-w-4xl mt-4 bg-white/70 backdrop-blur-md rounded-2xl p-3 border border-pink-200/60 shadow-sm transition-all duration-300">
-  <div class="text-center text-xs font-bold text-pink-900/70 mb-2 uppercase tracking-wider">All 7 Flowers & Assigned Colors</div>
-  <div id="flowerLegend" class="flex flex-wrap justify-center items-center gap-2 sm:gap-4 text-xs font-bold">
-    <!-- Generated legend badges -->
-  </div>
-</footer>
-
-<script>
-    // Exact 7 flowers with assigned hex colors extracted from reference image
+  <script>
     const FLOWERS = [
-      { name: "LOTUS",   color: "#F3A2B5", darkColor: "#d87890", nameLabel: "Pink" },
-      { name: "IRIS",    color: "#1E62FF", darkColor: "#0f43bd", nameLabel: "Blue" },
-      { name: "COSMOS",  color: "#5E2B78", darkColor: "#3d1950", nameLabel: "Purple" },
-      { name: "ROSE",    color: "#9E0B2B", darkColor: "#67041a", nameLabel: "Red" },
-      { name: "TULIP",   color: "#E5C800", darkColor: "#a38e00", nameLabel: "Yellow" },
-      { name: "POPPY",   color: "#C65100", darkColor: "#823300", nameLabel: "Orange" },
-      { name: "JASMINE", color: "#007B4B", darkColor: "#004d2e", nameLabel: "Green" }
+      { name: "LOTUS",   color: "#F3A2B5", displayColor: "Pink" },
+      { name: "IRIS",    color: "#1E62FF", displayColor: "Blue" },
+      { name: "COSMOS",  color: "#5E2B78", displayColor: "Purple" },
+      { name: "ROSE",    color: "#9E0B2B", displayColor: "Red" },
+      { name: "TULIP",   color: "#E5C800", displayColor: "Yellow" },
+      { name: "POPPY",   color: "#C65100", displayColor: "Orange" },
+      { name: "JASMINE", color: "#007B4B", displayColor: "Green" }
     ];
 
-    let currentMissing = null;
-  let score = 0;
-  let isProcessing = false;
-  let isColorBankVisible = true;
+    let currentMissing = "";
+    let score = 0;
+    let roundStartTime = 0;
+    let bestTime = null;
 
-  // Toggle Color Bank visibility
-  function toggleColorBank() {
-    isColorBankVisible = !isColorBankVisible;
-    const footer = document.getElementById('colorBankFooter');
-    const text = document.getElementById('colorBankText');
-    const icon = document.getElementById('colorBankIcon');
-
-    if (isColorBankVisible) {
-      footer.classList.remove('hidden');
-      text.textContent = 'Hide Color Bank';
-      icon.textContent = '👁️';
-    } else {
-      footer.classList.add('hidden');
-      text.textContent = 'Show Color Bank';
-      icon.textContent = '🙈';
-    }
-  }
-
-  // SVG Bouquet Template function replicating the prompt image badge style
-  function buildBouquetSVG(flowerName, colorHex) {
+    function createBouquetSVG(wordText, colorHex) {
       return `
-        <div class="bouquet-sticker w-full max-w-[280px] sm:max-w-[300px] animate-pop relative">
-          <svg viewBox="0 0 320 280" class="w-full h-auto drop-shadow-md" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <!-- Outer White Sticker Outline Filter -->
-              <filter id="whiteOutline" x="-10%" y="-10%" width="120%" height="120%">
-                <feMorphology in="SourceAlpha" operator="dilate" radius="5" result="expanded" />
-                <feFlood flood-color="#ffffff" result="white" />
-                <feComposite in="white" in2="expanded" operator="in" result="outline" />
-                <feMerge>
-                  <feMergeNode in="outline" />
-                  <feMergeNode in="SourceGraphic" />
-                </feMerge>
-              </filter>
-              <!-- Shadow for ribbon/layers -->
-              <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
-                <feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.15"/>
-              </filter>
-            </defs>
-
-            <g filter="url(#whiteOutline)">
-              <!-- Back Green Leaves -->
-              <path d="M 70 120 C 50 80, 80 40, 110 50 C 130 30, 180 20, 200 50 C 230 30, 270 70, 250 120 Z" fill="#2d6a4f"/>
-              <path d="M 85 105 C 70 75, 95 45, 120 55" stroke="#40916c" stroke-width="3" fill="none" stroke-linecap="round"/>
-              <path d="M 235 105 C 250 75, 225 45, 200 55" stroke="#40916c" stroke-width="3" fill="none" stroke-linecap="round"/>
-
-              <!-- Bouquet Outer Pink Layer -->
-              <path d="M 50 110 Q 160 50 270 110 L 210 240 Q 160 255 110 240 Z" fill="#fbcfe8" stroke="#f472b6" stroke-width="3" filter="url(#softShadow)"/>
-              
-              <!-- Inner Cream Wrap Layer -->
-              <path d="M 65 115 Q 160 65 255 115 L 200 230 Q 160 242 120 230 Z" fill="#fff5f7"/>
-
-              <!-- Flower Arrangement on Top -->
-              <!-- Left Purple Flowers -->
-              <g fill="#a855f7">
-                <circle cx="105" cy="75" r="11"/>
-                <circle cx="120" cy="65" r="9"/>
-                <circle cx="125" cy="82" r="10"/>
-                <circle cx="113" cy="74" r="5" fill="#fef08a"/>
-              </g>
-
-              <!-- Right Blue Flowers -->
-              <g fill="#3b82f6">
-                <circle cx="215" cy="75" r="11"/>
-                <circle cx="200" cy="65" r="9"/>
-                <circle cx="195" cy="82" r="10"/>
-                <circle cx="207" cy="74" r="5" fill="#fef08a"/>
-              </g>
-
-              <!-- Center Big Pink Flower -->
-              <g fill="#f472b6">
-                <circle cx="160" cy="65" r="16"/>
-                <circle cx="144" cy="55" r="12"/>
-                <circle cx="176" cy="55" r="12"/>
-                <circle cx="148" cy="75" r="12"/>
-                <circle cx="172" cy="75" r="12"/>
-                <circle cx="160" cy="65" r="8" fill="#fef08a"/>
-              </g>
-
-              <!-- Front Wrapper Banner (Where spray paint goes) -->
-              <path d="M 40 100 Q 160 120 280 100 Q 285 170 275 180 Q 160 205 45 180 Q 35 170 40 100 Z" fill="#fffcf7" stroke="#fbcfe8" stroke-width="4" filter="url(#softShadow)"/>
-              <path d="M 42 105 Q 160 125 278 105" stroke="#f472b6" stroke-width="2" fill="none" opacity="0.4"/>
-
-              <!-- Purple Ribbon Bow at Bottom -->
-              <g fill="#c084fc" filter="url(#softShadow)">
-                <!-- Left Loop -->
-                <path d="M 160 215 C 130 190 100 210 140 230 Z" stroke="#a855f7" stroke-width="2"/>
-                <!-- Right Loop -->
-                <path d="M 160 215 C 190 190 220 210 180 230 Z" stroke="#a855f7" stroke-width="2"/>
-                <!-- Ribbon Tails -->
-                <path d="M 152 225 L 130 260 L 145 255 L 158 230 Z" fill="#a855f7"/>
-                <path d="M 168 225 L 190 260 L 175 255 L 162 230 Z" fill="#a855f7"/>
-                <!-- Center Knot -->
-                <circle cx="160" cy="220" r="10" fill="#a855f7" stroke="#7e22ce" stroke-width="2"/>
-              </g>
-            </g>
-          </svg>
-
-          <!-- Spray Painted Flower Name Text Layer -->
-          <div class="absolute inset-0 flex items-center justify-center pt-2 px-6 pointer-events-none">
-            <span 
-              class="flower-font text-3xl sm:text-4xl font-extrabold tracking-wider uppercase text-center" 
-              style="color: ${colorHex}; text-shadow: 0 0 2px ${colorHex}, 1px 1px 0px rgba(0,0,0,0.15);"
-            >
-              ${flowerName}
-            </span>
-          </div>
-        </div>
+        <svg class="bouquet-svg" viewBox="0 0 240 180" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <filter id="spray-${wordText}" x="-20%" y="-20%" width="140%" height="140%">
+              <feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="2" result="noise"/>
+              <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.5" xChannelSelector="R" yChannelSelector="G"/>
+            </filter>
+          </defs>
+          <g transform="translate(120, 95)">
+            <!-- Outer Wrapping -->
+            <path d="M -70,-20 Q -95,-60 -65,-75 Q 0,-85 65,-75 Q 95,-60 70,-20 L 35,45 Q 0,60 -35,45 Z" fill="#fde8f0" stroke="#f8bbd0" stroke-width="2"/>
+            <path d="M -60,-20 Q -80,-55 -55,-68 Q 0,-75 55,-68 Q 80,-55 60,-20 L 30,40 Q 0,52 -30,40 Z" fill="#fff0f5"/>
+            <!-- Foliage & Flowers -->
+            <path d="M -50,-65 C -65,-85 -35,-95 -25,-75 C -10,-95 10,-95 25,-75 C 35,-95 65,-85 50,-65 Z" fill="#2e7d32"/>
+            <circle cx="-35" cy="-70" r="14" fill="#ab47bc"/><circle cx="-35" cy="-70" r="5" fill="#fbc02d"/>
+            <circle cx="0" cy="-75" r="16" fill="#f48fb1"/><circle cx="0" cy="-75" r="6" fill="#fff59d"/>
+            <circle cx="35" cy="-70" r="14" fill="#42a5f5"/><circle cx="35" cy="-70" r="5" fill="#fbc02d"/>
+            <!-- Banner Ribbon -->
+            <path d="M -85,-15 Q 0,-30 85,-15 Q 90,15 85,20 Q 0,5 -85,20 Q -90,15 -85,-15 Z" fill="#fffdfa" stroke="#f48fb1" stroke-width="2.5"/>
+            <!-- Spray-painted Text -->
+            <text x="0" y="8" 
+                  fill="${colorHex}" 
+                  font-family="'Impact', 'Arial Black', sans-serif" 
+                  font-size="25" 
+                  font-weight="900"
+                  text-anchor="middle" 
+                  letter-spacing="1.5"
+                  filter="url(#spray-${wordText})">
+              ${wordText}
+            </text>
+            <!-- Bow Knot -->
+            <path d="M 0,32 C -18,18 -32,38 -10,42 C -2,44 -1,33 0,32 Z" fill="#b39ddb"/>
+            <path d="M 0,32 C 18,18 32,38 10,42 C 2,44 1,33 0,32 Z" fill="#b39ddb"/>
+            <circle cx="0" cy="34" r="5" fill="#9575cd"/>
+            <path d="M -3,37 L -12,58 L -2,56 Z" fill="#9575cd"/>
+            <path d="M 3,37 L 12,58 L 2,56 Z" fill="#9575cd"/>
+          </g>
+        </svg>
       `;
     }
 
-    // Utility: Fisher-Yates array shuffle
-    function shuffle(arr) {
-      const array = [...arr];
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-      return array;
+    function shuffle(array) {
+      return array.slice().sort(() => Math.random() - 0.5);
     }
 
-    // Generate a new practice round
-    function generateRound() {
-      isProcessing = false;
-      const input = document.getElementById('guessInput');
-      input.value = '';
-      input.focus();
-
-      // 1. Randomly pick 1 missing flower (Answer)
-      const shuffledAll = shuffle(FLOWERS);
-      const missing = shuffledAll[0];
-      currentMissing = missing.name;
-
-      // 2. Remaining 6 flowers
-      const remaining = shuffledAll.slice(1);
-
-      // 3. Select 3 distinct flowers for Text Names
-      const textFlowers = remaining.slice(0, 3);
-
-      // 4. Select 3 distinct flowers for Text Colors from remaining 6
-      // Ensure no flower gets its own assigned color to guarantee challenge validity
-      let colorFlowers = remaining.slice(3, 6);
-
-      // Render 3 Bouquets horizontally
-      const container = document.getElementById('bouquetsContainer');
-      container.innerHTML = '';
-
-      for (let i = 0; i < 3; i++) {
-        const bouquetHTML = buildBouquetSVG(textFlowers[i].name, colorFlowers[i].color);
-        container.innerHTML += bouquetHTML;
-      }
-    }
-
-    // Handle user guess
-    function submitGuess(e) {
-      e.preventDefault();
-      if (isProcessing) return;
-
-      const input = document.getElementById('guessInput');
-      const guess = input.value.trim().toUpperCase();
-      const feedback = document.getElementById('feedbackMessage');
-
-      if (!guess) return;
-
-      if (guess === currentMissing) {
-        isProcessing = true;
-        score++;
-        document.getElementById('scoreDisplay').textContent = score;
-
-        feedback.className = "h-6 text-sm font-bold text-emerald-600 animate-bounce text-center";
-        feedback.textContent = "✨ Correct!";
-
-        if (score >= 5) {
-          setTimeout(() => {
-            alert("🎉 Matchup Won! You reached 5 points!");
-            score = 0;
-            document.getElementById('scoreDisplay').textContent = score;
-            feedback.textContent = "";
-            generateRound();
-          }, 300);
-        } else {
-          setTimeout(() => {
-            feedback.textContent = "";
-            generateRound();
-          }, 600);
-        }
-      } else {
-        feedback.className = "h-6 text-sm font-bold text-rose-600 text-center";
-        feedback.textContent = `❌ Incorrect! Missing was ${currentMissing}`;
-        input.select();
-      }
-    }
-
-    // Render static flower reference legend at bottom
-    function renderLegend() {
-      const legendContainer = document.getElementById('flowerLegend');
-      legendContainer.innerHTML = FLOWERS.map(f => `
-        <div class="flex items-center gap-1.5 bg-white/90 px-2.5 py-1 rounded-lg border border-pink-200 shadow-sm">
-          <span class="w-3.5 h-3.5 rounded-full inline-block border border-black/10" style="background-color: ${f.color}"></span>
-          <span class="text-slate-700">${f.name}</span>
+    function renderColorBank() {
+      const container = document.getElementById('flowerPills');
+      container.innerHTML = FLOWERS.map(f => `
+        <div class="flower-pill">
+          <div class="color-dot" style="background-color: ${f.color}"></div>
+          <span>${f.name}</span>
         </div>
       `).join('');
     }
 
-    // Initialization
-    window.onload = () => {
-      renderLegend();
-      generateRound();
-    };
+    function generateRound() {
+      const input = document.getElementById('guessInput');
+      input.value = '';
+      input.focus();
+
+      const shuffled = shuffle(FLOWERS);
+      const missingFlower = shuffled[0];
+      currentMissing = missingFlower.name;
+
+      const remaining = shuffled.slice(1);
+      const textFlowers = remaining.slice(0, 3);
+      const colorFlowers = remaining.slice(3, 6);
+
+      const bouquetStage = document.getElementById('bouquetStage');
+      bouquetStage.innerHTML = '';
+
+      for (let i = 0; i < 3; i++) {
+        const card = document.createElement('div');
+        card.className = 'bouquet-card';
+        card.innerHTML = createBouquetSVG(textFlowers[i].name, colorFlowers[i].color);
+        bouquetStage.appendChild(card);
+      }
+
+      roundStartTime = performance.now();
+    }
+
+    function handleGuess(event) {
+      event.preventDefault();
+      const input = document.getElementById('guessInput');
+      const userGuess = input.value.trim().toUpperCase();
+      const feedback = document.getElementById('feedback');
+
+      if (!userGuess) return;
+
+      if (userGuess === currentMissing) {
+        const solveTimeMs = performance.now() - roundStartTime;
+        const solveTimeSec = (solveTimeMs / 1000).toFixed(2);
+
+        score++;
+        document.getElementById('score').textContent = score;
+        document.getElementById('lastTime').textContent = `${solveTimeSec}s`;
+
+        if (bestTime === null || solveTimeMs < bestTime) {
+          bestTime = solveTimeMs;
+          document.getElementById('bestTime').textContent = `${solveTimeSec}s`;
+        }
+
+        feedback.className = 'feedback correct';
+        feedback.innerHTML = `Correct! <span class="time-badge">⏱️ ${solveTimeSec}s</span>`;
+
+        if (score >= 5) {
+          setTimeout(() => {
+            alert(`🏆 Matchup Complete! You reached 5 points!\nFastest round: ${(bestTime/1000).toFixed(2)}s`);
+            score = 0;
+            document.getElementById('score').textContent = score;
+            feedback.innerHTML = '';
+            generateRound();
+          }, 300);
+        } else {
+          setTimeout(() => {
+            feedback.innerHTML = '';
+            generateRound();
+          }, 800);
+        }
+      } else {
+        feedback.className = 'feedback wrong';
+        feedback.textContent = `Incorrect! (Missing was ${currentMissing})`;
+        setTimeout(() => {
+          feedback.textContent = '';
+          generateRound();
+        }, 1100);
+      }
+    }
+
+    function toggleColorBank() {
+      const bank = document.getElementById('colorBank');
+      const btn = document.getElementById('toggleBankBtn');
+      bank.classList.toggle('hidden');
+      if (bank.classList.contains('hidden')) {
+        btn.textContent = 'Show Color Bank';
+      } else {
+        btn.textContent = 'Hide Color Bank';
+      }
+      document.getElementById('guessInput').focus();
+    }
+
+    renderColorBank();
+    generateRound();
   </script>
 </body>
 </html>
